@@ -17,13 +17,16 @@ import {SERVER_URL} from '../../constants';
 const Login = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   const requestOtp = async () => {
     if (!email) {
       Alert.alert('Error', 'Please enter a valid email');
       return;
     }
-
+    if (!emailRegex.test(email)) {
+      Alert.alert('Error', 'Please enter a valid email address');
+      return;
+    }
     setIsLoading(true);
     try {
       const response = await fetch(`${SERVER_URL}/otp`, {
@@ -56,7 +59,7 @@ const Login = ({navigation}) => {
 
         <TextInput
           style={styles.input}
-          placeholder="Enter your email or phone number"
+          placeholder="Enter your email"
           value={email}
           onChangeText={setEmail}
           keyboardType="email-address"
